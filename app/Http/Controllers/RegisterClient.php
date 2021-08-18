@@ -24,6 +24,15 @@ class RegisterClient extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    
+     /*
+    for storing the data you need five input fiels
+    name, address, phone_number, price, company_id
+    which will be validate for required unique and max min numbers
+    and then genreate response based on error
+    and then it will finally add the data on the database
+    */
+
     public function upload(Request $request)
     {
         // rules for validating
@@ -35,7 +44,7 @@ class RegisterClient extends Controller
             'company_id'=>['required'],
         );
         
-        // vaidator
+        // validator
         $validate=validator::make($request->all(),$rules);
 
         // checking and returning response of validation
@@ -47,7 +56,7 @@ class RegisterClient extends Controller
 
 
         else
-        {
+        {   //taking the input and storing in database
             // $d=new DNS1D();
             $customer=new Client();
             $customer->name=$request->input('name');

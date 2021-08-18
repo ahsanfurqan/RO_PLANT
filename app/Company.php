@@ -18,4 +18,7 @@ class Company extends Model
     protected $fillable = [
         'name','phone_number','total_bottles',
     ];
+
+    protected $primaryKey='company_id';
+
 }
