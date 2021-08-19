@@ -19,9 +19,19 @@ use App\Http\Controllers\RegisterEmployee;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+// Company Api routes
 Route::POST('register/company',[RegisterCompany::class,'store']);
-Route::POST('register/client',[RegisterClient::class,'upload']);
+Route::GET('search/company/{name}',[RegisterCompany::class,'show']);
+Route::DELETE('delete/company/{id}',[RegisterCompany::class,'destroy']);
+Route::POST('update/company/{id}',[RegisterCompany::class,'update']);
+Route::GET('company',[RegisterCompany::class,'index']);
 
+//CLient Api routes
+Route::POST('register/client',[RegisterClient::class,'upload']);
+Route::GET('search/client/{name}',[RegisterClient::class,'show']);
+Route::DELETE('delete/client/{id}',[RegisterClient::class,'destroy']);
+Route::POST('update/client/{id}',[RegisterClient::class,'update']);
+Route::GET('client',[RegisterClient::class,'index']);
 
 //Employee Api routes
 Route::POST('register/employee',[RegisterEmployee::class,'store']);

@@ -16,7 +16,21 @@ class RegisterCompany extends Controller
      */
     public function index()
     {
-        //
+        $company=Company::all();
+        if($company->isEmpty())
+        {
+            $data=array(
+                'status_message'=>'No data found'
+            );
+            $code=404;
+        }
+        else{
+            $data=array(
+                $company
+            );
+            $code=200;
+        }
+        return response()->json($data,$code);
     }
 
     /**
@@ -83,9 +97,17 @@ class RegisterCompany extends Controller
      * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function show(Company $company)
+    public function show(Company $company,$name)
     {
-        //
+        $company=Company::where('name',$name)->get();
+       if($company->isEmpty())
+       {
+            return response()->json(['error'=>'No user found'],404);
+           
+       }
+       else{
+            return response($company,200);
+       }
     }
 
     /**
@@ -95,9 +117,29 @@ class RegisterCompany extends Controller
      * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
+    public function update($id,Request $request, Company $company)
     {
-        //
+        // query for getting the first user
+        $company=Company::where('company_id',$id)->first();
+        // if there is no record
+        if(!$company)
+        {
+            $data=array(
+                'status_message'=>'No record found'
+            );
+            $code=404;
+        }
+        // if there is record then update
+        else{
+            $company->update($request->all());
+            $data=array(
+                'status_message'=>'Record updated '.$id
+            );   
+            $code=200;
+        }
+        // returning the response respectively
+        return response()->json($data,$code);
+        // return $emp;
     }
 
     /**
@@ -106,8 +148,20 @@ class RegisterCompany extends Controller
      * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Company $company)
+    public function destroy(Company $company,$id)
     {
-        //
+         // query for finnding user
+         $company=Company::where('company_id',$id)->delete();
+         // if there is no record
+         if(!$company)
+         {
+             return response()->json(['status_message'=>'there is no record'],404);
+             
+         }
+         // if the record is deleted
+         else
+         {
+             return response()->json(['status_message'=>'record has been deleted'],200);
+         }
     }
 }

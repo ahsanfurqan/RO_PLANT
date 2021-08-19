@@ -15,7 +15,21 @@ class RegisterClient extends Controller
      */
     public function index()
     {
-        //
+        $client=Client::all();
+        if($client->isEmpty())
+        {
+            $data=array(
+                'status_message'=>'No data found'
+            );
+            $code=404;
+        }
+        else{
+            $data=array(
+                $client
+            );
+            $code=200;
+        }
+        return response()->json($data,$code);
     }
 
     /**
@@ -87,9 +101,17 @@ class RegisterClient extends Controller
      * @param  \App\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function show(Client $client)
+    public function show(Client $client,$name)
     {
-        //
+        $user=Client::where('name',$name)->get();
+       if($user->isEmpty())
+       {
+            return response()->json(['error'=>'No user found'],404);
+           
+       }
+       else{
+            return response($user,200);
+       }
     }
 
     /**
@@ -99,9 +121,29 @@ class RegisterClient extends Controller
      * @param  \App\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Client $client)
+    public function update(Request $request, Client $client,$id)
     {
-        //
+        // query for getting the first user
+        $client=Client::where('id',$id)->first();
+        // if there is no record
+        if(!$client)
+        {
+            $data=array(
+                'status_message'=>'No record found'
+            );
+            $code=404;
+        }
+        // if there is record then update
+        else{
+            $client->update($request->all());
+            $data=array(
+                'status_message'=>'Record updated '.$id
+            );   
+            $code=200;
+        }
+        // returning the response respectively
+        return response()->json($data,$code);
+        // return $emp;
     }
 
     /**
@@ -110,8 +152,21 @@ class RegisterClient extends Controller
      * @param  \App\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Client $client)
+    public function destroy($id,Client $client)
     {
-        //
+        // query for finnding user
+        $client=Client::where('id',$id)->delete();
+        // if there is no record
+        if(!$client)
+        {
+            return response()->json(['status_message'=>'there is no record'],404);
+            
+        }
+        // if the record is deleted
+        else
+        {
+            // $emp->delete();
+            return response()->json(['status_message'=>'record has been deleted'],200);
+        }
     }
 }
