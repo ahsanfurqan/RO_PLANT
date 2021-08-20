@@ -81,7 +81,7 @@ class RegisterEmployee extends Controller
             if($boo)
             {
                 return response()->json([
-                    'Employeeid'=>$employee->id,
+                    'Employeeid'=>$employee->employee_id,
                     'status_message'=>'Employee has been registered as user'
                 ],200);
             }

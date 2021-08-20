@@ -81,10 +81,16 @@ class RegisterClient extends Controller
             $customer->company_id=$request->input('company_id');
             $boo=$customer->save();
             if($boo){
+                // assigning barcode with id + phone_number
+                $client=Client::where('id',$customer->id)->first();
+                $client->barcode=$customer->barcode.$customer->id;
+                $foo=$client->save();
+                if($foo){
                 return response()->json([
                     'Client_id'=>$customer->id,
-                    'status_message'=>"Customer has been registered successfully"
+                    'status_message'=>"Customer has been registered successfully ".$client->barcode
                 ],200);
+            }
             }
             
             else{
@@ -165,7 +171,6 @@ class RegisterClient extends Controller
         // if the record is deleted
         else
         {
-            // $emp->delete();
             return response()->json(['status_message'=>'record has been deleted'],200);
         }
     }
