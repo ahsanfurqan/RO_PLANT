@@ -88,7 +88,7 @@ class RegisterClient extends Controller
                 if($foo){
                 return response()->json([
                     'Client_id'=>$customer->id,
-                    'status_message'=>"Customer has been registered successfully ".$client->barcode
+                    'status_message'=>"Customer has been registered successfully "
                 ],200);
             }
             }

@@ -24,9 +24,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //login
 Route::POST('login',[login::class,'userlogin']);
 //order routes
-Route::group(['middleware' => ['sessions']], function () {
-    Route::POST('add/order',[order::class,'store']);
-});
+// Route::group(['middleware' => ['sessions']], function () {
+//     Route::POST('add/order',[order::class,'store']);
+// });
+Route::Post('add/order',[order::class,'store']);
 
 // Company Api routes
 Route::POST('register/company',[RegisterCompany::class,'store']);

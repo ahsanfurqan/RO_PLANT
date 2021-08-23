@@ -10,4 +10,5 @@ class product extends Model
         'employee_id','client_id','empty','filled',
     ];
     protected $primaryKey='order_id';
+    protected $table='orders';
 }

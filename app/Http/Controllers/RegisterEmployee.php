@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 class RegisterEmployee extends Controller
 {
     /**
@@ -77,6 +78,7 @@ class RegisterEmployee extends Controller
             $employee->email=$request->input('email');
             $employee->password=Hash::make($request->input('password'));
             $employee->date_of_joining=$request->input('date_of_joining');
+            $employee->api_token=Str::random(60);
             $boo=$employee->save();
             if($boo)
             {

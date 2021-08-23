@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use App\Client;
 use App\User;
@@ -31,10 +32,9 @@ class order extends Controller
         //getting client with barcode
         $client=Client::where('barcode',$request->barcode)->first();
         // checkking if user is logged in
-        if(Auth::check()){
             //authenticating if loggedin user is correct
-            $emp=User::where('id',session()->get('user'))->first();
-            if($emp->isEmpty()){
+            $emp=User::where('api_token',$request->token)->first();
+            if($emp==NULL){
                 //returning response if doesnot exist
                 return response()->json(['status_message'=>'Unauthorized'],401);
             }
@@ -55,16 +55,24 @@ class order extends Controller
                     else{
                         $order= new product();
                         $order->client_id=$client->id;
-                        $order->employee_id=$emp->id;
+                        $order->employee_id=$emp->employee_id;
                         $order->empty=$request->input('empty');
                         $order->filled=$request->input('filled');
                         $boo=$order->save();
                         // if data added successfully 
                         if($boo){
+                            $message='mr\ms '.$client->name.' you have returned '.$order->empty.' and recieved '.$order->filled;
+                            $message=urlencode($message);
+                            // $c = new \Guzzle\Service\Client('http://api.github.com/users/');
+                            // $c= new GuzzleHttp\Client();
+                            // $response=http::post('https://api.whatsapp.com/send?phone=+923333733626&text=hello');
+                            $response=http::get('https://wa.me/923333733626/?text=hello');
+                            $response=json_decode($response);
                             $data=array(
-                                'status_message'=>'order has been added'
+                                'status_message'=>'order has been added '.$response
                             );
                             $code=200;
+
                         }
                         // if data does not added successfully
                         else{
@@ -76,10 +84,6 @@ class order extends Controller
                         return response()->json($data,$code);
                 }
             }
-        }
-        else{
-            return response()->json(['status_message'=>'unauthorized'],401);
-        }
     }
 
     /**

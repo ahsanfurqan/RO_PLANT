@@ -163,6 +163,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class,
+        NotificationChannels\ChatAPI\ChatAPIServiceProvider::class,
 
         /*
          * Package Service Providers...
