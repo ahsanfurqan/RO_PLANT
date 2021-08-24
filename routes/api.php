@@ -27,6 +27,7 @@ Route::POST('login',[login::class,'userlogin']);
 // Route::group(['middleware' => ['sessions']], function () {
 //     Route::POST('add/order',[order::class,'store']);
 // });
+// Route::post('message',[order::class,'message']);
 Route::Post('add/order',[order::class,'store']);
 
 // Company Api routes
