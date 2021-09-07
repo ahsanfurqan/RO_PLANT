@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use App\Client;
 use App\User;
+use App\Bill;
 use GuzzleHttp;
 class order extends Controller
 {
@@ -28,25 +29,25 @@ class order extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function message(Request $request)
-    {
-        $url = "https://messages-sandbox.nexmo.com/v0.1/messages";
-        $params = ["to" => ["type" => "whatsapp", "number" => $request->input('number')],
-        "from" => ["type" => "whatsapp", "number" => "14157386170"],
-        "message" => [
-            "content" => [
-                "type" => "text",
-                "text" => "Hello from Vonage and Laravel :) Please reply to this message with a number between 1 and 100"
-            ]
-        ]
-    ];
-    $headers = ["Authorization" => "Basic " . base64_encode(env('NEXMO_API_KEY') . ":" . env('NEXMO_API_SECRET'))];
+    // public function message(Request $request)
+    // {
+    //     $url = "https://messages-sandbox.nexmo.com/v0.1/messages";
+    //     $params = ["to" => ["type" => "whatsapp", "number" => $request->input('number')],
+    //     "from" => ["type" => "whatsapp", "number" => "14157386170"],
+    //     "message" => [
+    //         "content" => [
+    //             "type" => "text",
+    //             "text" => "Hello from Vonage and Laravel :) Please reply to this message with a number between 1 and 100"
+    //         ]
+    //     ]
+    // ];
+    // $headers = ["Authorization" => "Basic " . base64_encode(env('NEXMO_API_KEY') . ":" . env('NEXMO_API_SECRET'))];
 
-    $client = new \GuzzleHttp\Client();
-    $response = $client->request('POST', $url, ["headers" => $headers, "json" => $params]);
-    $data = $response->getBody();
-    return info($data);
-    }
+    // $client = new \GuzzleHttp\Client();
+    // $response = $client->request('POST', $url, ["headers" => $headers, "json" => $params]);
+    // $data = $response->getBody();
+    // return info($data);
+    // }
     public function store(Request $request)
     {  
         //getting client with barcode
@@ -57,6 +58,9 @@ class order extends Controller
             if($emp==NULL){
                 //returning response if doesnot exist
                 return response()->json(['status_message'=>'Unauthorized'],401);
+            }
+            elseif($client==NULL){
+                return response()->json(['status_message'=>'Client Does not exist'],404);
             }
             else{
                 // chcking if its first order
@@ -73,12 +77,39 @@ class order extends Controller
                     }
                     // if validation passes
                     else{
+                        //Adding Product
                         $order= new product();
                         $order->client_id=$client->id;
                         $order->employee_id=$emp->employee_id;
                         $order->empty=$request->input('empty');
                         $order->filled=$request->input('filled');
+                        $order->cost=$client->price*(int)$request->input('filled');
+                        //getting record if cutomer is not booking for first time
+                        $prev_bill=Bill::where('client_id',$client->id)->first();
+                        //if not
+                        if($prev_bill){
+                            $prev_bill->update(array('used_bottles'=>$prev_bill->used_bottles+(int)$request->input('filled'),'amount'=>$prev_bill->amount+$client->price*(int)$request->input('filled')));
+                        }
+                        // if its customer first time
+                        else{
+                        $bill=new Bill();
+                        $bill->client_id=$client->id;
+                        $bill->used_bottles=$request->input('filled');
+                        $bill->amount=$client->price*$order->filled;
+                        $boo1=$bill->save();
+                            // return $prev_bill;
+                            // $prev_bill->used_bottles=(int)$request->input('filled');
+                            // $prev_bill->amount+$client->cost*(int)$request->input('filled');
+                            
+                        }
+                        if($boo1)
                         $boo=$order->save();
+                        else{
+                            $data=array(
+                                'status_message'=>'data was not added'
+                            );
+                            $code=406;
+                        }
                         // if data added successfully 
                         if($boo){
                             $message=$client->name.' you have returned '.$order->empty.' bottles and recieved '.$order->filled.' bottles';

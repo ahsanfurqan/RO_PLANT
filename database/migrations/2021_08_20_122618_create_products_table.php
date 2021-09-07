@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration
             $table->foreign('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');     
             $table->integer('empty');
             $table->integer('filled');
+            $table->double('cost');
             $table->timestamps();
         });
     }
