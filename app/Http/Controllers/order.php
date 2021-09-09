@@ -20,7 +20,7 @@ class order extends Controller
      */
     public function index()
     {
-        $order=product::all();
+        $order=product::select("*")->with('client')->take(3)->get();
         return response()->json($order,200);
     }
 

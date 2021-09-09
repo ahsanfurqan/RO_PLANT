@@ -11,4 +11,7 @@ class product extends Model
     ];
     protected $primaryKey='order_id';
     protected $table='orders';
+    public function client(){
+        return $this->belongsTo(Client::class);
+    }
 }

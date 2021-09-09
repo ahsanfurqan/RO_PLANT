@@ -16,8 +16,15 @@ class bill_controller extends Controller
      */
     public function index($id)
     {
-        $client=Bill::where('client_id',$id)->get();
-        return response()->json($client,200);
+        $client=Client::where('id',$id)->first();
+        $bill=Bill::where('client_id',$id)->first();
+        $data=array(
+            'client_name'=>$client->name,
+            'bill_id'=>$bill->bill_id,
+            'bottles'=>$bill->used_bottles,
+            'amount'=>$bill->amount
+        );
+        return response()->json($data,200);
     }
 
     /**
