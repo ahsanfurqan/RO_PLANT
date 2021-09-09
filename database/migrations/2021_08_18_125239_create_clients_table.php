@@ -18,7 +18,7 @@ class CreateClientsTable extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('phone_number');
-            $table->string('barcode');
+            $table->string('barcode')->unique();
             $table->float('price');
             $table->unsignedBigInteger('company_id');
             $table->foreign('company_id')->references('company_id')->on('companies')->onUpdate('cascade')->onDelete(

@@ -77,7 +77,7 @@ class RegisterCompany extends Controller
 
             if($boo){
                 return response()->json([
-                    'company_id'=>$company->id,
+                    'company_id'=>$company->company_id,
                     'status_message'=>"Company has been registered successfully"
                 ],200);
             }
@@ -106,7 +106,7 @@ class RegisterCompany extends Controller
            
        }
        else{
-            return response($company,200);
+            return response()->json($company[0],200);
        }
     }
 
