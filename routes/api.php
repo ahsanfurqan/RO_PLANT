@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\bill_controller;
 use App\Http\Controllers\RegisterClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,9 +28,14 @@ Route::POST('login',[login::class,'userlogin']);
 // Route::group(['middleware' => ['sessions']], function () {
 //     Route::POST('add/order',[order::class,'store']);
 // });
+//
+Route::GET('search/bill/{id}',[bill_controller::class,'index']);
+
+
+
 // Route::post('message',[order::class,'message']);
 Route::Post('add/order',[order::class,'store']);
-
+Route::GET('display/order',[order::class,'index']);
 // Company Api routes
 Route::POST('register/company',[RegisterCompany::class,'store']);
 Route::GET('search/company/{name}',[RegisterCompany::class,'show']);

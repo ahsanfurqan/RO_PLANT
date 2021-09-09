@@ -106,7 +106,7 @@ class RegisterCompany extends Controller
            
        }
        else{
-            return response($company,200);
+            return response()->json($company[0],200);
        }
     }
 

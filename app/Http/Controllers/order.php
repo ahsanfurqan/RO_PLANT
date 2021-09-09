@@ -20,7 +20,8 @@ class order extends Controller
      */
     public function index()
     {
-        
+        $order=product::all();
+        return response()->json($order,200);
     }
 
     /**
