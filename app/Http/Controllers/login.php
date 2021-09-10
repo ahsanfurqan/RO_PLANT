@@ -10,8 +10,11 @@ use Illuminate\Support\Facades\Auth;
 class login extends Controller
 {
     public function userlogin(Request $request){
+        $email=$request->email;
+        $password=$request->password;
+        
         $data=$request->only(['email','password']);
-        $token=Auth::attempt($data);
-        return response()->json(['message'=>$token]);
+        $bool=Auth::attempt($data);
+        return response()->json(['message'=>$bool]);
     }
 }
