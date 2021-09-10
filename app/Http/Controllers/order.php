@@ -60,7 +60,7 @@ class order extends Controller
                 //returning response if doesnot exist
                 return response()->json(['status_message'=>'Unauthorized'],401);
             }
-            elseif($client==NULL){
+            if($client==NULL){
                 return response()->json(['status_message'=>'Client Does not exist'],404);
             }
             else{
@@ -85,6 +85,7 @@ class order extends Controller
                         $order->empty=$request->input('empty');
                         $order->filled=$request->input('filled');
                         $order->cost=$client->price*(int)$request->input('filled');
+                        $boo=$order->save();
                         //getting record if cutomer is not booking for first time
                         $prev_bill=Bill::where('client_id',$client->id)->first();
                         //if not
@@ -103,14 +104,14 @@ class order extends Controller
                             // $prev_bill->amount+$client->cost*(int)$request->input('filled');
                             
                         }
-                        if($boo1)
-                        $boo=$order->save();
-                        else{
-                            $data=array(
-                                'status_message'=>'data was not added'
-                            );
-                            $code=406;
-                        }
+                        // if($boo1)
+                        
+                        // else{
+                        //     $data=array(
+                        //         'status_message'=>'data was not added'
+                        //     );
+                        //     $code=406;
+                        // }
                         // if data added successfully 
                         if($boo){
                             $message=$client->name.' you have returned '.$order->empty.' bottles and recieved '.$order->filled.' bottles';
@@ -123,7 +124,7 @@ class order extends Controller
                             // $response=http::get('https://wa.me/923333733626/?text=hello');
                             // $response=json_decode($response);
                             $data=array(
-                                'status_message'=>'order has been added '.response()->json($res->getbody())
+                                'status_message'=>'order has been added '
                             );
                             $code=200;
 

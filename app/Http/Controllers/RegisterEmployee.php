@@ -56,7 +56,7 @@ class RegisterEmployee extends Controller
             'salary'=>['required'],
             'password'=>['required','min:11'],
             'confirm_password'=>['required','same:password'],
-            'date_of_joining'=>['required','date_format:y-m-d']
+            'date_of_joining'=>['required']
         );
         // validate
         $validate=validator::make($request->all(),$rules);
