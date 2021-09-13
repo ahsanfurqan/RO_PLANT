@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ForgotPasswordApiController;
 use App\Http\Controllers\bill_controller;
 use App\Http\Controllers\RegisterClient;
 use Illuminate\Http\Request;
@@ -24,6 +25,7 @@ use App\Http\Controllers\login;
 // });
 //login
 Route::POST('login',[login::class,'userlogin']);
+Route::POST('forgot-password',[ForgotPasswordApiController::class,'sendResetLinkEmail']);
 //order routes
 // Route::group(['middleware' => ['sessions']], function () {
 //     Route::POST('add/order',[order::class,'store']);

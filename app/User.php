@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\PasswordResetNotification;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable 
@@ -44,4 +45,10 @@ class User extends Authenticatable
     // {
     //     return [];
     // }
+    public function sendPasswordResetNotification($token)
+{
+    $url = 'https://ahsan.com/reset-password?token='. $token;
+
+    $this->notify(new PasswordResetNotification($url));
+}
 }
