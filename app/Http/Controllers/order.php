@@ -90,7 +90,7 @@ class order extends Controller
                         $prev_bill=Bill::where('client_id',$client->id)->first();
                         //if not
                         if($prev_bill){
-                            $prev_bill->update(array('used_bottles'=>$prev_bill->used_bottles+(int)$request->input('filled'),'amount'=>$prev_bill->amount+$client->price*(int)$request->input('filled')));
+                            $boo1=$prev_bill->update(array('used_bottles'=>$prev_bill->used_bottles+(int)$request->input('filled'),'amount'=>$prev_bill->amount+$client->price*(int)$request->input('filled')));
                         }
                         // if its customer first time
                         else{
@@ -113,11 +113,11 @@ class order extends Controller
                         //     $code=406;
                         // }
                         // if data added successfully 
-                        if($boo){
-                            $message=$client->name.' you have returned '.$order->empty.' bottles and recieved '.$order->filled.' bottles';
-                            $message=urlencode($message);
-                            $c=new GuzzleHttp\Client();
-                            $res=$c->request('GET','https://api.callmebot.com/whatsapp.php?phone=+923362394601&text='.$message.'&apikey=746371');
+                        if($boo&&$boo1){
+                            // $message=$client->name.' you have returned '.$order->empty.' bottles and recieved '.$order->filled.' bottles';
+                            // $message=urlencode($message);
+                            // $c=new GuzzleHttp\Client();
+                            // $res=$c->request('GET','https://api.callmebot.com/whatsapp.php?phone=+923362394601&text='.$message.'&apikey=746371');
                             // $c = new \Guzzle\Service\Client('http://api.github.com/users/');
                             // $c= new GuzzleHttp\Client();
                             // $response=http::post('https://api.whatsapp.com/send?phone=+923333733626&text=hello');

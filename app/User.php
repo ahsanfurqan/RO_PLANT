@@ -47,7 +47,7 @@ class User extends Authenticatable
     // }
     public function sendPasswordResetNotification($token)
 {
-    $url = 'https://ahsan.com/reset-password?token='. $token;
+    $url = 'http://localhost/RO-plant/RO_PLANT_WEB/veiw/resetpass.php?token='. $token;
 
     $this->notify(new PasswordResetNotification($url));
 }
