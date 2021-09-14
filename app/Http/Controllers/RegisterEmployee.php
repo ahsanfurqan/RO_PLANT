@@ -23,14 +23,14 @@ class RegisterEmployee extends Controller
                 'status_message'=>'No data found'
             );
             $code=404;
+            return response()->json($data,$code);
         }
         else{
-            $data=array(
-                $emp
-            );
+            
             $code=200;
+            return response()->json($emp,$code);
         }
-        return response()->json($data,$code);
+        
     }
 
     /**

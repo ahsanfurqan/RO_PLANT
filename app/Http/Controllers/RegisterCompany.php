@@ -23,14 +23,16 @@ class RegisterCompany extends Controller
                 'status_message'=>'No data found'
             );
             $code=404;
+            return response()->json($data,$code);
         }
         else{
-            $data=array(
-                $company
-            );
+            // $data=array(
+                // $company
+            // );
             $code=200;
+        
+        return response()->json($company,$code);
         }
-        return response()->json($data,$code);
     }
 
     /**
