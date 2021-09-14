@@ -52,7 +52,7 @@ class RegisterEmployee extends Controller
         $rules=array(
             'name'=>['required','max:50'],
             'email'=>['required','max:50','email','unique:users'],
-            'phone_number'=>['required','max:11','min:11','unique:users'],
+            'phone_number'=>['required','max:12','min:12','unique:users','regex:/(03)[0-9]{2}[-][0-9]{7}/'],
             'salary'=>['required'],
             'password'=>['required','min:11'],
             'confirm_password'=>['required','same:password'],
@@ -64,7 +64,7 @@ class RegisterEmployee extends Controller
         // checking validation returning error
         if($validate->fails())
         {
-            return response()->json([$validate->errors()],406);
+            return response()->json(["status_message"=>$validate->errors()],406);
         }
 
 

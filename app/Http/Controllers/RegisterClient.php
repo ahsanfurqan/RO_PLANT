@@ -53,7 +53,7 @@ class RegisterClient extends Controller
         $rules=array(
             'name'=>['required','max:50'],
             'address'=>['required','max:50'],
-            'phone_number'=>['required','max:11','min:11','Unique:clients'],
+            'phone_number'=>['required','max:12','min:12','Unique:clients','regex:/(03)[0-9]{2}[-][0-9]{7}/'],
             'price'=>['required'],
             'company_id'=>['required'],
         );
@@ -64,7 +64,7 @@ class RegisterClient extends Controller
         // checking and returning response of validation
         if($validate->fails())
         {
-            return response()->json([$validate->errors()],406);
+            return response()->json(['status_message'=>$validate->errors()],406);
 
         }
 

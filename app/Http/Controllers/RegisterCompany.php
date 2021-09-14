@@ -51,7 +51,7 @@ class RegisterCompany extends Controller
         // rules for validating
         $rules=array(
             'name'=>['required','max:50','unique:companies'],
-            'phone_number'=>['required','max:11','min:11','unique:companies'],
+            'phone_number'=>['required','max:12','min:12','unique:companies','regex:/(03)[0-9]{2}[-][0-9]{7}/'],
             'total_bottles'=>['required']
         );
         // validating the data 
@@ -61,7 +61,7 @@ class RegisterCompany extends Controller
         // checking the validtion fails and return response of error 
 
         if($validate->fails()){
-            return response()->json($validate->errors(),406);
+            return response()->json(["status_message"=>$validate->errors()],406);
         }
         // creating a new company after passing validation
         else
