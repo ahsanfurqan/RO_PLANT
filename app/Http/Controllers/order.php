@@ -26,7 +26,7 @@ class order extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     *xx
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */

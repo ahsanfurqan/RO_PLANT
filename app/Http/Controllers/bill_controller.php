@@ -46,7 +46,20 @@ class bill_controller extends Controller
      */
     public function show(Bill $bill)
     {
-        //
+        $bill=Bill::select('*')->with('Client')->get();
+        if($bill->isEmpty())
+        {
+            $data=array(
+                'status_message'=>'No data found'
+            );
+            $code=404;
+            return response()->json($data,$code);
+        }
+        else{
+            
+            $code=200;
+            return response()->json($bill,$code);
+        }
     }
 
     /**
@@ -67,8 +80,20 @@ class bill_controller extends Controller
      * @param  \App\Bill  $bill
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Bill $bill)
+    public function destroy(Bill $bill,$id)
     {
-        //
+        // query for finnding user
+        $bill=Bill::where('bill_id',$id)->delete();
+        // if there is no record
+        if(!$bill)
+        {
+            return response()->json(['status_message'=>'there is no record'],200);
+            
+        }
+        // if the record is deleted
+        else
+        {
+            return response()->json(['status_message'=>'Record has been deleted'],200);
+        }
     }
 }

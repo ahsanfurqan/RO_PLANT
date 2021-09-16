@@ -39,6 +39,9 @@ Route::post('reset',[ResetPasswordAPIController::class,'reset']);
 //
 Route::GET('search/bill/{id}',[bill_controller::class,'index']);
 
+Route::GET('bill',[bill_controller::class,'show']);
+Route::GET('delete/bill/{id}',[bill_controller::class,'destroy']);
+
 
 
 // Route::post('message',[order::class,'message']);
@@ -58,6 +61,7 @@ Route::GET('search/client/{name}',[RegisterClient::class,'show']);
 Route::DELETE('delete/client/{id}',[RegisterClient::class,'destroy']);
 Route::POST('update/client/{id}',[RegisterClient::class,'update']);
 Route::GET('client',[RegisterClient::class,'index']);
+Route::GET('client/count',[RegisterClient::class,'dashboard_data']);
 
 //Employee Api routes
 Route::POST('register/employee',[RegisterEmployee::class,'store']);

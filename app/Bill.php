@@ -11,4 +11,7 @@ class Bill extends Model
         'client_id','used_bottles','amount',
     ];
     protected $primaryKey='bill_id';
+    public function client(){
+        return $this->belongsTo(Client::class);
+    }
 }

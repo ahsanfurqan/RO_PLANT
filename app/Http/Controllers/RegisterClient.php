@@ -45,7 +45,12 @@ class RegisterClient extends Controller
     and then genreate response based on error
     and then it will finally add the data on the database
     */
+    public function dashboard_data(){
+        $client=Client::all();
+        return response()->json(['total_count'=>$client->count()],200);
+    }
 
+    
     public function upload(Request $request)
     {
         // rules for validating
