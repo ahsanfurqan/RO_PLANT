@@ -131,10 +131,39 @@ class RegisterClient extends Controller
      * @param  \App\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Client $client,$id)
+    public function update(Request $request,$id)
     {
         // query for getting the first user
         $client=Client::where('id',$id)->first();
+        if($client->phone_number!=$request->phone_number){
+            $rules=array(
+                'name'=>['required','max:50'],
+                'address'=>['required','max:50'],
+                'phone_number'=>['required','max:12','min:12','Unique:clients','regex:/(03)[0-9]{2}[-][0-9]{7}/'],
+                'price'=>['required'],
+            );    
+        }
+        else{
+        // rules for validating
+        $rules=array(
+            'name'=>['required','max:50'],
+            'address'=>['required','max:50'],
+            'phone_number'=>['required','max:12','min:12','regex:/(03)[0-9]{2}[-][0-9]{7}/'],
+            'price'=>['required'],
+        );
+    }
+        
+        // // validator
+        $validate=validator::make($request->all(),$rules);
+
+        // // checking and returning response of validation
+        if($validate->fails())
+        {
+            return response()->json(['status_message'=>$validate->errors()],406);
+
+        }
+       
+        
         // if there is no record
         if(!$client)
         {
@@ -147,7 +176,7 @@ class RegisterClient extends Controller
         else{
             $client->update($request->all());
             $data=array(
-                'status_message'=>'Record updated '.$id
+                'status_message'=>'Record updated '
             );   
             $code=200;
         }

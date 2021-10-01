@@ -119,10 +119,47 @@ class RegisterCompany extends Controller
      * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function update($id,Request $request, Company $company)
+    public function update($id,Request $request)
     {
-        // query for getting the first user
         $company=Company::where('company_id',$id)->first();
+
+        $count=0;
+        if($company->phone_number==$request->phone_number&&$company->name==$request->name)
+        {
+            $rules=array(
+                'name'=>['required','max:50'],
+                'phone_number'=>['required','max:12','min:12','regex:/(03)[0-9]{2}[-][0-9]{7}/'],
+                'total_bottles'=>['required']
+            );
+        }
+        elseif($company->phone_number!=$request->phone_number&&$company->name!=$request->name){
+            $rules=array(
+                'name'=>['required','max:50','Unique:companies'],
+                'phone_number'=>['required','max:12','min:12','Unique:companies','regex:/(03)[0-9]{2}[-][0-9]{7}/'],
+                'total_bottles'=>['required'],
+            );   
+        }
+        elseif($company->name!=$request->name){
+            $rules=array(
+                'name'=>['required','max:50','Unique:companies'],
+                'phone_number'=>['required','max:12','min:12','regex:/(03)[0-9]{2}[-][0-9]{7}/'],
+                'total_bottles'=>['required'],
+            );   
+        }
+        elseif($company->phone_number!=$request->phone_number){
+            $rules=array(
+                'name'=>['required','max:50'],
+                'phone_number'=>['required','max:12','min:12','Unique:companies','regex:/(03)[0-9]{2}[-][0-9]{7}/'],
+                'total_bottles'=>['required'],
+            );   
+    }
+        // // validating the data 
+        $validate=Validator::make($request->all(),$rules);
+        if($validate->fails()){
+            return response()->json(["status_message"=>$validate->errors()],406);
+        }
+        // query for getting the first user
+        
         // if there is no record
         if(!$company)
         {
@@ -135,7 +172,7 @@ class RegisterCompany extends Controller
         else{
             $company->update($request->all());
             $data=array(
-                'status_message'=>'Record updated '.$id
+                'status_message'=>'Record updated'
             );   
             $code=200;
         }

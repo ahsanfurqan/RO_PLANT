@@ -84,7 +84,7 @@ class RegisterEmployee extends Controller
             {
                 return response()->json([
                     'Employeeid'=>$employee->employee_id,
-                    'status_message'=>'Employee has been registered as user'
+                    'status_message'=>'Employee has been registered '
                 ],200);
             }
             else{
@@ -131,6 +131,30 @@ class RegisterEmployee extends Controller
     {
         // query for getting the first user
         $emp=User::where('employee_id',$id)->first();
+        if($emp->phone_number!=$request->phone_number){
+            $rules=array(
+            'name'=>['required','max:50'],
+            'phone_number'=>['required','max:12','min:12','unique:users','regex:/(03)[0-9]{2}[-][0-9]{7}/'],
+            'salary'=>['required'],
+            'date_of_joining'=>['required']
+            );    
+        }
+        else{
+            $rules=array(
+                'name'=>['required','max:50'],
+                'phone_number'=>['required','max:12','min:12','regex:/(03)[0-9]{2}[-][0-9]{7}/'],
+                'salary'=>['required'],
+                'date_of_joining'=>['required']
+                );   
+        }
+        // validate
+        $validate=validator::make($request->all(),$rules);
+
+        // checking validation returning error
+        if($validate->fails())
+        {
+            return response()->json(["status_message"=>$validate->errors()],406);
+        }
         // if there is no record
         if(!$emp)
         {
@@ -143,7 +167,7 @@ class RegisterEmployee extends Controller
         else{
             $emp->update($request->all());
             $data=array(
-                'status_message'=>'Record updated '.$id
+                'status_message'=>'Record updated '
             );   
             $code=200;
         }

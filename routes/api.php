@@ -29,7 +29,7 @@ Route::POST('login',[login::class,'userlogin']);
 //forgotpass
 Route::POST('forgot-password',[ForgotPasswordApiController::class,'sendResetLinkEmail']);
 
-//rest
+//restPass
 Route::post('reset',[ResetPasswordAPIController::class,'reset']);
 
 //order routes
@@ -40,7 +40,7 @@ Route::post('reset',[ResetPasswordAPIController::class,'reset']);
 Route::GET('search/bill/{id}',[bill_controller::class,'index']);
 
 Route::GET('bill',[bill_controller::class,'show']);
-Route::GET('delete/bill/{id}',[bill_controller::class,'destroy']);
+Route::DELETE('delete/bill/{id}',[bill_controller::class,'destroy']);
 
 
 
